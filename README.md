@@ -13,7 +13,7 @@ gratuito su **Streamlit Community Cloud**.
   ore viaggio, mezzo, pranzo, trasferta, cliente, collega
 - Totale ore giornaliero e settimanale calcolati in automatico (HH:MM)
 - Privacy: ogni dipendente vede e modifica SOLO il proprio foglio
-- Salvataggio settimana, esportazione PDF, notifica WhatsApp precompilata
+- Salvataggio settimana ed esportazione PDF
 
 **Vista Amministratore** (protetta da PIN)
 
@@ -94,10 +94,3 @@ Ogni salvataggio resta archiviato per sempre in `timesheet_data.json`
 
 - il **dipendente** vede «I miei fogli ore salvati» — SOLO i propri, con PDF
 - l'**amministratore** vede l'«Archivio completo» di tutti i dipendenti
-
-## Note su WhatsApp
-
-Il pulsante WhatsApp usa l'API `https://wa.me/` e apre un messaggio
-precompilato ("Ciao, ho compilato il foglio ore per la settimana dal … al …").
-WhatsApp non consente di allegare file via link: il dipendente scarica prima
-il PDF e lo allega al messaggio.

@@ -443,20 +443,6 @@ def vista_dipendente() -> None:
         use_container_width=True,
     )
 
-    testo_wa = (
-        f"Ciao, ho compilato il foglio ore per la settimana dal {dal} al {al}. "
-        f"— {dipendente} (Verdeimpianti)"
-    )
-    st.link_button(
-        "🟢 NOTIFICA SU WHATSAPP",
-        f"https://wa.me/?text={urllib.parse.quote(testo_wa)}",
-        use_container_width=True,
-    )
-    st.caption(
-        "WhatsApp non permette di allegare file da link: scarica prima il PDF, "
-        "poi allegalo al messaggio precompilato."
-    )
-
     # ---- Archivio personale: SOLO i documenti del dipendente selezionato ----
     st.divider()
     st.markdown("#### 📂 I miei fogli ore salvati")
