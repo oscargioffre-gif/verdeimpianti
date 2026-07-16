@@ -1,4 +1,4 @@
-# ⚡ Foglio Ore — TEKNOIMPIANTI S.R.L.
+# ⚡ Foglio Ore — VERDEIMPIANTI S.R.L.
 
 App web per la gestione delle ore di lavoro settimanali, replica digitale del
 modulo cartaceo aziendale. Scritta in Python + Streamlit, pronta per il deploy
@@ -32,7 +32,7 @@ data_manager.py            # persistenza JSON (atomica, con file-lock)
 pdf_generator.py           # generazione PDF con ReportLab
 requirements.txt           # dipendenze
 assets/logo.png|svg        # logo aziendale
-.streamlit/config.toml     # tema brand Teknoimpianti
+.streamlit/config.toml     # tema brand Verdeimpianti
 .streamlit/secrets.toml.example  # modello per PIN e sync GitHub
 timesheet_data.json        # archivio dati (creato al primo salvataggio)
 ```
@@ -46,7 +46,7 @@ streamlit run app.py
 
 ## Deploy su Streamlit Community Cloud (gratuito)
 
-1. Crea una repository GitHub (es. `teknoimpianti-foglio-ore`) e carica
+1. Crea una repository GitHub (es. `verdeimpianti-foglio-ore`) e carica
    tutti i file del progetto.
 2. Vai su [share.streamlit.io](https://share.streamlit.io), accedi con
    GitHub e scegli **New app** → seleziona la repo, branch `main`,
@@ -70,7 +70,7 @@ Soluzione integrata: aggiungi ai Secrets anche
 ```toml
 [github]
 token  = "ghp_xxxxxxxxxxxx"   # Personal Access Token con scope `repo`
-repo   = "tuo-utente/teknoimpianti-foglio-ore"
+repo   = "tuo-utente/verdeimpianti-foglio-ore"
 branch = "main"
 ```
 

@@ -1,5 +1,5 @@
 """
-pdf_generator.py — Replica digitale del modulo cartaceo TEKNOIMPIANTI S.R.L.
+pdf_generator.py — Replica digitale del modulo cartaceo VERDEIMPIANTI S.R.L.
 ============================================================================
 Genera con ReportLab un PDF A4 orizzontale identico alla scheda ore
 aziendale: intestazione "ORE DAL ... AL ...", COGNOME, tabella
@@ -88,12 +88,12 @@ def _draw_header(c: rl_canvas.Canvas, year: int, week: int, employee: str) -> fl
     c.rect(0, PAGE_H - band_h, PAGE_W, band_h, stroke=0, fill=1)
     c.setFillColor(colors.white)
     c.setFont("Helvetica-Bold", 16)
-    c.drawString(MARGIN, PAGE_H - band_h + 5 * mm, "TEKNOIMPIANTI S.R.L.")
+    c.drawString(MARGIN, PAGE_H - band_h + 5 * mm, "VERDEIMPIANTI S.R.L.")
     c.setFont("Helvetica", 8.5)
     c.drawRightString(
         PAGE_W - MARGIN,
         PAGE_H - band_h + 5.5 * mm,
-        "IMPIANTI CIVILI ED INDUSTRIALI  •  QUADRI DI DISTRIBUZIONE E DI CONTROLLO  •  AUTOMAZIONE  —  VENEGONO INFERIORE (VA)",
+        "IMPIANTI CIVILI ED INDUSTRIALI  •  QUADRI DI DISTRIBUZIONE E DI CONTROLLO  •  AUTOMAZIONE  —  TORINO (TO)",
     )
 
     y = PAGE_H - band_h - 10 * mm
@@ -257,7 +257,7 @@ def _draw_page(c: rl_canvas.Canvas, year: int, week: int, employee: str,
     c.setFillColor(colors.grey)
     c.drawCentredString(
         PAGE_W / 2, 8 * mm,
-        f"Foglio ore generato dall'app TEKNOIMPIANTI S.R.L. — {date.today().strftime('%d/%m/%Y')}",
+        f"Foglio ore generato dall'app VERDEIMPIANTI S.R.L. — {date.today().strftime('%d/%m/%Y')}",
     )
 
 

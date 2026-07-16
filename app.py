@@ -1,5 +1,5 @@
 """
-app.py — Foglio Ore digitale TEKNOIMPIANTI S.R.L.
+app.py — Foglio Ore digitale VERDEIMPIANTI S.R.L.
 ==================================================
 App Streamlit con doppia vista:
   • Dipendente  → compila e vede SOLO il proprio foglio ore (mobile-first)
@@ -25,10 +25,10 @@ import pdf_generator as pdfgen
 # ============================================================================
 
 DIPENDENTI = [
-    "Daniele Todaro",
-    "Luca Simonetta",
-    "Federico Bernacchi",
-    "Alessandro Trotti",
+    "Alberto Rossi",
+    "Giampiero Bianchi",
+    "Demetrio Gialli",
+    "Nazareno Neri",
 ]
 
 MEZZI = [
@@ -96,19 +96,19 @@ BLU_CHIARO = T["accento"]
 # ============================================================================
 
 st.set_page_config(
-    page_title="Foglio Ore — Teknoimpianti S.r.l.",
+    page_title="Foglio Ore — Verdeimpianti S.r.l.",
     page_icon="⚡",
     layout="centered",
     initial_sidebar_state="collapsed",
 )
 
-# --- Filigrana: scritta TEKNOIMPIANTI blu, tenue, ripetuta su tutto lo sfondo ---
+# --- Filigrana: scritta VERDEIMPIANTI blu, tenue, ripetuta su tutto lo sfondo ---
 _WM_SVG = (
     "<svg xmlns='http://www.w3.org/2000/svg' width='460' height='320'>"
     "<text x='230' y='160' font-family='Arial,Helvetica,sans-serif' font-size='36' "
     f"font-weight='bold' fill='{T['accento']}' fill-opacity='0.055' "
     "text-anchor='middle' letter-spacing='6' "
-    "transform='rotate(-24 230 160)'>TEKNOIMPIANTI</text></svg>"
+    "transform='rotate(-24 230 160)'>VERDEIMPIANTI</text></svg>"
 )
 _WM_URL = "data:image/svg+xml," + urllib.parse.quote(_WM_SVG)
 
@@ -223,11 +223,11 @@ def intestazione() -> None:
         else:
             st.markdown(
                 f"<h1 style='text-align:center;color:{BLU_SCURO};margin-bottom:0'>"
-                "TEKNOIMPIANTI S.R.L.</h1>",
+                "VERDEIMPIANTI S.R.L.</h1>",
                 unsafe_allow_html=True,
             )
     st.markdown(
-        "<div class='tk-header-sub'>FOGLIO ORE SETTIMANALE — VENEGONO INFERIORE (VA)</div>",
+        "<div class='tk-header-sub'>FOGLIO ORE SETTIMANALE — TORINO (TO)</div>",
         unsafe_allow_html=True,
     )
     st.divider()
@@ -380,9 +380,9 @@ def vista_dipendente() -> None:
                 st.toggle("🧳 TRASFERTA", key=k("trasf"))
 
             st.text_input("CLIENTE / cantiere", key=k("cliente"),
-                          placeholder="Es. Cantiere Rossi — Varese")
+                          placeholder="Es. Cantiere Torino Nord")
             st.text_input("COLLEGA in squadra", key=k("collega"),
-                          placeholder="Es. Bianchi")
+                          placeholder="Es. Giampiero Bianchi")
 
             # Totale giorno calcolato in automatico
             rec_tmp = {
@@ -445,7 +445,7 @@ def vista_dipendente() -> None:
 
     testo_wa = (
         f"Ciao, ho compilato il foglio ore per la settimana dal {dal} al {al}. "
-        f"— {dipendente} (Teknoimpianti)"
+        f"— {dipendente} (Verdeimpianti)"
     )
     st.link_button(
         "🟢 NOTIFICA SU WHATSAPP",
@@ -674,8 +674,8 @@ def main() -> None:
 
     st.divider()
     st.caption(
-        "TEKNOIMPIANTI S.R.L. — Impianti civili ed industriali · Quadri di "
-        "distribuzione e di controllo · Automazione — Venegono Inferiore (VA)"
+        "VERDEIMPIANTI S.R.L. — Impianti civili ed industriali · Quadri di "
+        "distribuzione e di controllo · Automazione — Torino (TO)"
     )
 
 

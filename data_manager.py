@@ -1,12 +1,12 @@
 """
-data_manager.py — Persistenza dati su file JSON per TEKNOIMPIANTI S.R.L.
+data_manager.py — Persistenza dati su file JSON per VERDEIMPIANTI S.R.L.
 =========================================================================
 Struttura del file JSON:
 
 {
   "2026": {
     "29": {
-      "Todaro": {
+      "Alberto Rossi": {
         "2026-07-13": {
           "turno1_inizio": "08:00", "turno1_fine": "12:00",
           "turno2_inizio": "13:00", "turno2_fine": "17:00",
