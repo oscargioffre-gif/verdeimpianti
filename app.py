@@ -317,8 +317,6 @@ def vista_dipendente() -> None:
         seeds = {
             f"{prefix}{iso_day}|t1i": parse_time(rec["turno1_inizio"]),
             f"{prefix}{iso_day}|t1f": parse_time(rec["turno1_fine"]),
-            f"{prefix}{iso_day}|t2i": parse_time(rec["turno2_inizio"]),
-            f"{prefix}{iso_day}|t2f": parse_time(rec["turno2_fine"]),
             f"{prefix}{iso_day}|stra": float(rec["ore_stra"] or 0.0),
             f"{prefix}{iso_day}|viaggio": float(rec["ore_viaggio"] or 0.0),
             f"{prefix}{iso_day}|mezzo": rec["mezzo"] or "",
@@ -341,18 +339,17 @@ def vista_dipendente() -> None:
 
         with st.container(border=True):
             st.markdown(
-                f"<div class='tk-day-title'>{GIORNI_NOME[idx]} {d.strftime('%d/%m')}"
+                f"<div class='tk-day-title notranslate' translate='no'>"
+                f"{GIORNI_NOME[idx]} {d.strftime('%d/%m')}"
                 f" &nbsp;·&nbsp; giorno {d.day}</div>",
                 unsafe_allow_html=True,
             )
 
             c1, c2 = st.columns(2)
             with c1:
-                st.time_input("1° turno — DALLE ORE", key=k("t1i"), step=timedelta(minutes=15))
-                st.time_input("2° turno — DALLE ORE", key=k("t2i"), step=timedelta(minutes=15))
+                st.time_input("DALLE ORE", key=k("t1i"), step=timedelta(minutes=15))
             with c2:
-                st.time_input("1° turno — ALLE ORE", key=k("t1f"), step=timedelta(minutes=15))
-                st.time_input("2° turno — ALLE ORE", key=k("t2f"), step=timedelta(minutes=15))
+                st.time_input("ALLE ORE", key=k("t1f"), step=timedelta(minutes=15))
 
             c3, c4 = st.columns(2)
             with c3:
@@ -388,24 +385,52 @@ def vista_dipendente() -> None:
             rec_tmp = {
                 "turno1_inizio": time_to_str(st.session_state[k("t1i")]),
                 "turno1_fine": time_to_str(st.session_state[k("t1f")]),
-                "turno2_inizio": time_to_str(st.session_state[k("t2i")]),
-                "turno2_fine": time_to_str(st.session_state[k("t2f")]),
             }
             tot_min = dm.day_total_minutes(rec_tmp)
             tot_settimana_min += tot_min
-            st.markdown(
-                f"<span class='tk-badge'>TOTALE ORE: {dm.fmt_hhmm(tot_min)}</span>",
-                unsafe_allow_html=True,
-            )
+
+            def record_giorno(kk):
+                return {
+                    "turno1_inizio": time_to_str(st.session_state[kk("t1i")]),
+                    "turno1_fine": time_to_str(st.session_state[kk("t1f")]),
+                    "turno2_inizio": None,
+                    "turno2_fine": None,
+                    "ore_stra": float(st.session_state[kk("stra")]),
+                    "ore_viaggio": float(st.session_state[kk("viaggio")]),
+                    "mezzo": st.session_state[kk("mezzo")].strip(),
+                    "pranzo": bool(st.session_state[kk("pranzo")]),
+                    "trasferta": bool(st.session_state[kk("trasf")]),
+                    "cliente": st.session_state[kk("cliente")].strip(),
+                    "collega": st.session_state[kk("collega")].strip(),
+                }
+
+            c_tot, c_salva = st.columns([1, 1])
+            with c_tot:
+                # translate="no"/notranslate: impedisce al traduttore automatico
+                # del browser di storpiare la scritta (es. "TOTALE MINERALE")
+                st.markdown(
+                    f"<span class='tk-badge notranslate' translate='no'>"
+                    f"TOTALE ORE: {dm.fmt_hhmm(tot_min)}</span>",
+                    unsafe_allow_html=True,
+                )
+            with c_salva:
+                if st.button("💾 SALVA GIORNATA", key=k("salva"), type="primary",
+                             use_container_width=True):
+                    avviso = dm.save_day(anno, settimana, dipendente, iso_day,
+                                         record_giorno(k),
+                                         github_cfg=github_cfg_da_secrets())
+                    st.success(f"{GIORNI_NOME[idx]} {d.strftime('%d/%m')} salvato ✔")
+                    if avviso:
+                        st.warning(avviso)
 
     st.divider()
     st.markdown(
         f"<h3 style='text-align:center'>Totale settimana: "
-        f"<span class='tk-badge'>{dm.fmt_hhmm(tot_settimana_min)}</span></h3>",
+        f"<span class='tk-badge notranslate' translate='no'>{dm.fmt_hhmm(tot_settimana_min)}</span></h3>",
         unsafe_allow_html=True,
     )
 
-    # ---- Raccolta dati correnti dai widget ----
+    # ---- Raccolta dati correnti dai widget (per l'esportazione PDF) ----
     def dati_correnti() -> dict:
         out = {}
         for d in giorni_settimana:
@@ -414,8 +439,8 @@ def vista_dipendente() -> None:
             out[iso_day] = {
                 "turno1_inizio": time_to_str(st.session_state[kk("t1i")]),
                 "turno1_fine": time_to_str(st.session_state[kk("t1f")]),
-                "turno2_inizio": time_to_str(st.session_state[kk("t2i")]),
-                "turno2_fine": time_to_str(st.session_state[kk("t2f")]),
+                "turno2_inizio": None,
+                "turno2_fine": None,
                 "ore_stra": float(st.session_state[kk("stra")]),
                 "ore_viaggio": float(st.session_state[kk("viaggio")]),
                 "mezzo": st.session_state[kk("mezzo")].strip(),
@@ -425,14 +450,6 @@ def vista_dipendente() -> None:
                 "collega": st.session_state[kk("collega")].strip(),
             }
         return out
-
-    # ---- Azioni ----
-    if st.button("💾 SALVA SETTIMANA", type="primary", use_container_width=True):
-        avviso = dm.save_week(anno, settimana, dipendente, dati_correnti(),
-                              github_cfg=github_cfg_da_secrets())
-        st.success(f"Foglio ore salvato — settimana dal {dal} al {al}.")
-        if avviso:
-            st.warning(avviso)
 
     pdf_bytes = pdfgen.generate_week_pdf(anno, settimana, dipendente, dati_correnti())
     st.download_button(
@@ -448,7 +465,7 @@ def vista_dipendente() -> None:
     st.markdown("#### 📂 I miei fogli ore salvati")
     archivio = dm.list_saved_weeks(dipendente)
     if not archivio:
-        st.caption("Nessun foglio salvato finora. Usa «SALVA SETTIMANA» qui sopra.")
+        st.caption("Nessun foglio salvato finora. Usa «SALVA GIORNATA» nei giorni qui sopra.")
     else:
         for a_anno, a_sett, _ in archivio[:26]:  # ultime ~26 settimane
             a_dal, a_al = dm.week_bounds_label(a_anno, a_sett)
@@ -486,10 +503,8 @@ def _tabella_settimana(anno: int, settimana: int, giorni: dict) -> pd.DataFrame:
         righe.append({
             "N.": d.day,
             "GG": GIORNI_SIGLA[idx],
-            "Dalle (1°)": rec.get("turno1_inizio") or "",
-            "Alle (1°)": rec.get("turno1_fine") or "",
-            "Dalle (2°)": rec.get("turno2_inizio") or "",
-            "Alle (2°)": rec.get("turno2_fine") or "",
+            "Dalle": rec.get("turno1_inizio") or "",
+            "Alle": rec.get("turno1_fine") or "",
             "Totale": dm.fmt_hhmm(tot) if tot else "",
             "Stra.": rec.get("ore_stra") or "",
             "Viaggio": rec.get("ore_viaggio") or "",

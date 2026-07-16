@@ -34,22 +34,20 @@ MARGIN = 12 * mm
 GIORNI_SIGLA = ["L", "M", "M", "G", "V", "S"]
 GIORNI_NOME = ["Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì", "Sabato"]
 
-# (intestazione, larghezza relativa)
+# (intestazione, larghezza relativa) — turno unico: una sola coppia di orari
 COLONNE = [
     ("N.", 3.0),
     ("GG", 3.0),
-    ("DALLE ORE", 7.0),
-    ("ALLE ORE", 7.0),
-    ("DALLE ORE", 7.0),
-    ("ALLE ORE", 7.0),
-    ("TOTALE\nORE", 5.5),
-    ("ORE\nSTRA.", 5.0),
-    ("ORE\nVIAGGIO", 6.0),
-    ("MEZZO", 9.0),
-    ("PRANZO\nSI/NO", 5.5),
-    ("TRASF.\nSI/NO", 5.5),
-    ("CLIENTE", 17.0),
-    ("COLLEGA", 12.5),
+    ("DALLE ORE", 8.5),
+    ("ALLE ORE", 8.5),
+    ("TOTALE\nORE", 6.0),
+    ("ORE\nSTRA.", 5.5),
+    ("ORE\nVIAGGIO", 6.5),
+    ("MEZZO", 10.0),
+    ("PRANZO\nSI/NO", 6.0),
+    ("TRASF.\nSI/NO", 6.0),
+    ("CLIENTE", 19.0),
+    ("COLLEGA", 14.0),
 ]
 
 
@@ -174,8 +172,6 @@ def _draw_table(
             GIORNI_SIGLA[r],
             _fmt(rec.get("turno1_inizio")),
             _fmt(rec.get("turno1_fine")),
-            _fmt(rec.get("turno2_inizio")),
-            _fmt(rec.get("turno2_fine")),
             dm.fmt_hhmm(tot_min) if tot_min else "",
             _fmt_num(rec.get("ore_stra")),
             _fmt_num(rec.get("ore_viaggio")),
@@ -188,7 +184,7 @@ def _draw_table(
 
         c.setFillColor(colors.black)
         for i, text in enumerate(cells):
-            bold = i in (0, 1, 6)
+            bold = i in (0, 1, 4)
             font = "Helvetica-Bold" if bold else "Helvetica"
             size = 8.5
             # Riduci il font se il testo non entra nella cella

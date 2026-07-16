@@ -190,6 +190,31 @@ def save_week(
     return None
 
 
+def save_day(
+    year: int,
+    week: int,
+    employee: str,
+    day_iso: str,
+    record: Dict[str, Any],
+    github_cfg: Optional[Dict[str, str]] = None,
+) -> Optional[str]:
+    """Salva UN solo giorno del dipendente senza toccare gli altri giorni."""
+    with FileLock(str(LOCK_FILE), timeout=10):
+        data = _read_raw()
+        week_dict = (
+            data.setdefault(str(year), {})
+            .setdefault(str(week), {})
+            .setdefault(employee, {})
+        )
+        week_dict[day_iso] = record
+        _write_raw(data)
+        payload = json.dumps(data, ensure_ascii=False, indent=2, sort_keys=True)
+
+    if github_cfg and github_cfg.get("token") and github_cfg.get("repo"):
+        return _push_to_github(payload, github_cfg)
+    return None
+
+
 def get_all_week(year: int, week: int, employees: list[str]) -> Dict[str, Dict[str, Any]]:
     """Vista amministratore: { dipendente: {data: record} } per la settimana."""
     return {emp: get_week(year, week, emp) for emp in employees}
