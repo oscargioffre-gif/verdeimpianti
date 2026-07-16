@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+.streamlit/secrets.toml
+timesheet_data.json.lock
+*.tmp
+*.json.corrotto
