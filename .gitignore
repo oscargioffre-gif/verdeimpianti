@@ -4,3 +4,4 @@ __pycache__/
 timesheet_data.json.lock
 *.tmp
 *.json.corrotto
+*.json
